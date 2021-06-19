@@ -1,0 +1,12 @@
+Resources:
+  SampleSlotType:
+    Type: CustomResource::Lex::SlotType
+    Properties:
+      Name: SampleSlotTypeA
+      ValueSelectionStrategy: ORIGINAL_VALUE
+      EnumerationValues:
+        - Value: a
+          Synonyms: []
+Outputs:
+  Checksum:
+    Value: !GetAtt SampleSlotType.Checksum

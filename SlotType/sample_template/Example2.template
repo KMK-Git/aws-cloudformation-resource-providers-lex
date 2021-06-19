@@ -1,0 +1,22 @@
+Resources:
+  SampleSlotType:
+    Type: CustomResource::Lex::SlotType
+    Properties:
+      Name: SampleSlotTypeB
+      ValueSelectionStrategy: TOP_RESOLUTION
+      CreateVersion: True
+      ParentSlotTypeSignature: AMAZON.AlphaNumeric
+      Description: Sample Custom Slot Type
+      EnumerationValues:
+        - Value: a
+          Synonyms: []
+        - Value: b
+          Synonyms:
+            - c
+            - d
+      SlotTypeConfigurations:
+      - RegexConfiguration:
+          Pattern: 'regexpattern'
+Outputs:
+  Checksum:
+    Value: !GetAtt SampleSlotType.Checksum

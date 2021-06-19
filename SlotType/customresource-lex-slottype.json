@@ -1,0 +1,166 @@
+{
+    "typeName": "CustomResource::Lex::SlotType",
+    "description": "Resource schema for CustomResource::Lex::SlotType",
+    "sourceUrl": "https://github.com/KMK-Git/aws-cloudformation-resource-providers-lex.git",
+    "definitions": {
+        "EnumerationValue": {
+            "description": "Each slot type can have a set of values. Each enumeration value represents a value the slot type can take.\n\nFor example, a pizza ordering bot could have a slot type that specifies the type of crust that the pizza should have. The slot type could include the values\n+ thick\n+ thin\n+ stuffed",
+            "type": "object",
+            "properties": {
+                "Synonyms": {
+                    "description": "Additional values related to the slot type value.",
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 140
+                    }
+                },
+                "Value": {
+                    "description": "The value of the slot type.",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 140
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "Value"
+            ]
+        },
+        "RegexConfiguration": {
+            "description": "A regular expression used to validate the value of a slot.",
+            "type": "object",
+            "properties": {
+                "Pattern": {
+                    "description": "A regular expression used to validate the value of a slot.\n\nUse a standard regular expression. Amazon Lex supports the following characters in the regular expression:\n+ A-Z, a-z\n+ 0-9\n+ Unicode characters (\"\\ u<Unicode>\")\nRepresent Unicode characters with four digits, for example \"\\u0041\" or \"\\u005A\".\n\nThe following regular expression operators are not supported:\n* Infinite repeaters: *, +, or {x,} with no upper bound.\n* Wild card (.)",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100
+                }
+            },
+            "required": [
+                "Pattern"
+            ],
+            "additionalProperties": false
+        },
+        "SlotTypeConfiguration": {
+            "description": "Provides configuration information for a slot type.",
+            "type": "object",
+            "properties": {
+                "RegexConfiguration": {
+                    "$ref": "#/definitions/RegexConfiguration"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "Checksum": {
+            "description": "Checksum of the $LATEST version of the slot type.",
+            "type": "string"
+        },
+        "CreatedDate": {
+            "type": "string"
+        },
+        "CreateVersion": {
+            "description": "When set to true a new numbered version of the slot type is created for each update.",
+            "type": "boolean",
+            "default": false
+        },
+        "Description": {
+            "description": "A description of the slot type.",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+        },
+        "EnumerationValues": {
+            "description": "A list of EnumerationValue objects that defines the values that the slot type can take. Each value can have a list of synonyms, which are additional values that help train the machine learning model about the values that it resolves for a slot.\nWhen Amazon Lex resolves a slot value, it generates a resolution list that contains up to five possible values for the slot. If you are using a Lambda function, this resolution list is passed to the function. If you are not using a Lambda function you can choose to return the value that the user entered or the first value in the resolution list as the slot value. The valueSelectionStrategy field indicates the option to use.",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/EnumerationValue"
+            },
+            "minItems": 1,
+            "maxItems": 10000
+        },
+        "LastUpdatedDate": {
+            "type": "string"
+        },
+        "Name": {
+            "description": "The name of the slot type. The name is not case sensitive. The name can't match a built-in slot type name, or a built-in slot type name with \"AMAZON.\" removed. For example, because there is a built-in slot type called AMAZON.DATE, you can't create a custom slot type called DATE.",
+            "type": "string",
+            "pattern": "^([A-Za-z]_?){1,101}$"
+        },
+        "ParentSlotTypeSignature": {
+            "description": "The built-in slot type used as the parent of the slot type. When you define a parent slot type, the new slot type has all of the same configuration as the parent.\nOnly AMAZON.AlphaNumeric is supported.",
+            "type": "string",
+            "pattern": "^((AMAZON\\.)_?|[A-Za-z]_?)+"
+        },
+        "SlotTypeConfigurations": {
+            "description": "Configuration information that extends the parent built-in slot type. The configuration is added to the settings for the parent slot type.",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/SlotTypeConfiguration"
+            },
+            "minItems": 0,
+            "maxItems": 10
+        },
+        "ValueSelectionStrategy": {
+            "description": "Determines the slot resolution strategy that Amazon Lex uses to return slot type values. The field can be set to one of the following values:\nORIGINAL_VALUE - Returns the value entered by the user, if the user value is similar to the slot value.\nTOP_RESOLUTION - If there is a resolution list for the slot, return the first value in the resolution list as the slot type value. If there is no resolution list, null is returned.\nIf you don't specify the valueSelectionStrategy, the default is ORIGINAL_VALUE.",
+            "default": "ORIGINAL_VALUE",
+            "type": "string",
+            "enum": [
+                "ORIGINAL_VALUE",
+                "TOP_RESOLUTION"
+            ]
+        },
+        "Version": {
+            "description": "The version of the slot type.",
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "Name"
+    ],
+    "primaryIdentifier": [
+        "/properties/Name",
+        "/properties/Version"
+    ],
+    "readOnlyProperties": [
+        "/properties/Version",
+        "/properties/Checksum",
+        "/properties/CreatedDate",
+        "/properties/LastUpdatedDate"
+    ],
+    "createOnlyProperties": [
+        "/properties/Name"
+    ],
+    "writeOnlyProperties": [
+        "/properties/CreateVersion"
+    ],
+    "handlers": {
+        "create": {
+            "permissions": [
+                "lex:GetSlotType",
+                "lex:PutSlotType"
+            ]
+        },
+        "read": {
+            "permissions": [
+                "lex:GetSlotType"
+            ]
+        },
+        "update": {
+            "permissions": [
+                "lex:GetSlotType",
+                "lex:PutSlotType"
+            ]
+        },
+        "delete": {
+            "permissions": [
+                "lex:DeleteSlotType"
+            ]
+        }
+    }
+}

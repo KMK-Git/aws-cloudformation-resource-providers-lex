@@ -1,0 +1,9 @@
+[tool.black]
+extend-exclude = '.*/src/customresource_lex_.*/models\.py'
+[tool.mypy]
+exclude = '.*/src/customresource_lex_.*/models\.py|.*/build/*'
+[[tool.mypy.overrides]]
+module = '*.models'
+follow_imports = 'skip'
+[tool.isort]
+profile = 'black'

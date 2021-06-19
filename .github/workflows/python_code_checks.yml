@@ -1,0 +1,63 @@
+name: Python Code Checks
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+jobs:
+  lint:
+    name: Lint Python Code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - uses: actions/cache@v1
+        with:
+          key: v0-pip-lint-${{ hashFiles('lint_requirements.txt') }}
+          path: ~/.cache/pip
+          restore-keys: |
+            v0-pip-lint-
+            v0-pip-
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r lint_requirements.txt
+      - name: Check other phrase usages
+        run: python ./tools/static_word_checks.py
+      - name: Check documentation
+        run: python ./tools/check_documentation.py
+      - name: Run black
+        run: black --check --verbose .
+      - name: Run mypy
+        run: mypy SlotType
+      - name: Run isort
+        run: isort -cv .
+  test:
+    name: Test Python Code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - uses: actions/cache@v1
+        with:
+          key: v0-pip-test-${{ hashFiles('test_requirements.txt') }}
+          path: ~/.cache/pip
+          restore-keys: |
+            v0-pip-test-
+            v0-pip-
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r test_requirements.txt
+      - name: Test with pytest
+        run: pytest --cov
+      - name: Upload coverage data to coveralls.io
+        run: coveralls --service=github
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check coverage
+        run: coverage report -m --fail-under=100

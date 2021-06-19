@@ -1,0 +1,12 @@
+{
+    "CREATE": {
+        "/ParentSlotTypeSignature": "AMAZON.AlphaNumeric",
+        "/SlotTypeConfigurations": [
+            {
+                "RegexConfiguration": {
+                    "Pattern": "A"
+                }
+            }
+        ]
+    }
+}

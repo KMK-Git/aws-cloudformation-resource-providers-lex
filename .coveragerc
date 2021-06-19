@@ -1,0 +1,7 @@
+[run]
+command_line=-m pytest
+source =
+  SlotType
+omit =
+  # Exclude auto-generated models file
+  SlotType/src/customresource_lex_slottype/models.py

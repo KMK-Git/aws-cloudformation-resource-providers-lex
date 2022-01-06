@@ -1,0 +1,2 @@
+# aws-cloudformation-resource-providers-lex
+This repository contains Python code for developing a CloudFormation Custom Resource Type for Amazon Lex Custom Slot Types. This is meant more as an example on how CloudFormation custom resource types can be created using Python. While I have written tests to cover all lines of code in this project, I haven't extensively tested custom slot types created through this code and it shouldn't be used in production.
